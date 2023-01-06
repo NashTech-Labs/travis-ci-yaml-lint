@@ -1,0 +1,22 @@
+language: ruby
+
+git:
+  submodules: false
+
+env:
+  - AWS_DEFAULT_REGION=us-east-2 
+  
+before_install:
+  - echo "Installing AWS CLI"
+  - pip install --upgrade --user awscli
+  - echo "Installing Test Gems"
+  - gem install yaml-lint
+
+install: true
+
+script:
+  - aws cloudformation validate-template --template-body file://2zone-vpc-cloudformation.yml
+  - yaml-lint 2zone-vpc-cloudformation.yml
+
+after_success:
+  - echo "YAML Linted"
